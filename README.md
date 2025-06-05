@@ -44,3 +44,32 @@ FlowU segue o padrão MVC e é composto por:
 ```bash
 docker build -t flowu .
 docker run -p 8080:8080 flowu
+
+---
+
+## 🗂 Estrutura de diretórios
+
+flowu/
+├── src/
+│   ├── main/
+│   │   ├── java/com/flowu/
+│   │   │   ├── controller/
+│   │   │   ├── model/
+│   │   │   ├── repository/
+│   │   │   └── service/
+│   │   └── resources/
+│   │       └── application.yml
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a MIT License.
+
+---
+
+### Desenvolvido com 💡 por Tulio Martins.
+
