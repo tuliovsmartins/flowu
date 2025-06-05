@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  flowu-db:
+    image: postgres:15
+    container_name: flowu-db
+    environment:
+      POSTGRES_DB: flowu
+      POSTGRES_USER: flowu_user
+      POSTGRES_PASSWORD: flowu_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  flowu-app:
+    build: .
+    container_name: flowu-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - flowu-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://flowu-db:5432/flowu
+      SPRING_DATASOURCE_USERNAME: flowu_user
+      SPRING_DATASOURCE_PASSWORD: flowu_pass
+
+volumes:
+  pgdata:

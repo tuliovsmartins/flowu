@@ -37,18 +37,39 @@ FlowU segue o padrão MVC e é composto por:
 - Persistência em banco de dados PostgreSQL.
 - Executável via Docker para facilitar o deploy.
 
+--
+
+## 🚀 Execução local
+
+- É necessário ter o Java 17 no seu JAVA_PATH e o Maven instalados.
+
+Baixar as dependências do projeto e executar o comando abaixo para iniciar o servidor localmente:
+
+```bash
+ cd src
+ mvn clean install
+```
+
+Após o download das dependencias, executar.
+
+```bash
+ mvn spring-boot:run
+```
+Após isso, o serviço estará disponível em `http://localhost:8080`.
+
 ---
 
 ## 🚀 Execução com Docker
 
 ```bash
-docker build -t flowu .
-docker run -p 8080:8080 flowu
+ docker build -t flowu .
+ docker run -p 8080:8080 flowu
+```
 
 ---
 
 ## 🗂 Estrutura de diretórios
-
+```
 flowu/
 ├── src/
 │   ├── main/
@@ -62,14 +83,14 @@ flowu/
 ├── Dockerfile
 ├── docker-compose.yml
 └── README.md
-
+```
 ---
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a MIT License.
+Este projeto está licenciado sob a MIT License.Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
 
 ---
 
-### Desenvolvido com 💡 por Tulio Martins.
+#### Desenvolvido com 💡 por Tulio Martins.
 
