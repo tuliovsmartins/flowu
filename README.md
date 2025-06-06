@@ -74,10 +74,10 @@ flowu/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/flowu/
-│   │   │   ├── controller/
-│   │   │   ├── model/
-│   │   │   ├── repository/
-│   │   │   └── service/
+│   │   │   ├── com.controller/
+│   │   │   ├── com.model/
+│   │   │   ├── com.repository/
+│   │   │   └── com.service/
 │   │   └── resources/
 │   │       └── application.yml
 ├── Dockerfile
