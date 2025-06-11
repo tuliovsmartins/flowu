@@ -3,9 +3,11 @@ package com.flowu.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "flows")
@@ -14,7 +16,6 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Flow {
 
     @Id
@@ -29,26 +30,27 @@ public class Flow {
     private Long companyId;
 
     @Column(name = "executed_success_count")
-    private Integer executedSuccessCount;
+    private Long executedSuccessCount = 0L;
 
     @Column(name = "executed_error_count")
-    private Integer error;
+    private Long executedErrorCount = 0L;
 
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "flow", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FlowNode> nodes = new List<FlowNode>();
+    private List<FlowNode> nodes = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "flow", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FlowEdge> edges    = new List<FlowEdge>();
+    private List<FlowEdge> edges = new ArrayList<>();
 
-    // Métodos utilitários para adicionar nós/edges e manter a bidirecionalidade
+
     public void addNode(FlowNode node) {
         nodes.add(node);
         node.setFlow(this);
