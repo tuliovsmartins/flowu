@@ -42,4 +42,5 @@ public class FlowNode {
     @Column(name = "executed_error_count")
     private Long executedErrorCount = 0L;
 
+
 }
