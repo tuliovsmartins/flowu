@@ -39,8 +39,8 @@ public class FlowNodeService {
     public void incrementNodeSuccessCount(String nodeId){
         flowNodeRepository.findById(nodeId).ifPresent(
                 node -> {
-                    node.setExecutedSuccessCount(node.getExecutedSuccessCount()+1);
-                    flowNodeRepository.save(node);
+                    node.setExecutedSuccessCount(node.getExecutedSuccessCount() + 1);
+                    // O save() foi removido. O JPA/Hibernate fará o update no final da transação.
                 }
         );
     }

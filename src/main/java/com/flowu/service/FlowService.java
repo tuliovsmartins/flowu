@@ -1,7 +1,14 @@
 package com.flowu.service;
 
+import com.flowu.dto.flow.FlowRequestDTO;
+import com.flowu.mapper.FlowEdgeMapper;
+import com.flowu.mapper.FlowMapper;
+import com.flowu.mapper.FlowNodeMapper;
 import com.flowu.model.Flow;
+import com.flowu.model.FlowEdge;
+import com.flowu.model.FlowNode;
 import com.flowu.repository.FlowRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +21,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FlowService {
     private final FlowRepository flowRepository;
+    private final FlowMapper flowMapper;
+    private final FlowNodeMapper flowNodeMapper;
+    private final FlowEdgeMapper flowEdgeMapper;
 
     @Transactional
     public Flow saveFlow(Flow flow){
@@ -37,13 +47,17 @@ public class FlowService {
     }
 
     @Transactional
-    public Flow updateFlow(String id, Flow updateFlow){
-        return flowRepository.findById(id).map(existingFlow -> {
-            existingFlow.setTitle(updateFlow.getTitle());
-            existingFlow.setUserId(updateFlow.getUserId());
-            existingFlow.setCompanyId(updateFlow.getCompanyId());
-            return flowRepository.save(existingFlow);
-        }).orElse(null);
+    public Flow updateFlow(String id, Flow updateData){
+        Flow existingFlow = flowRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Flow não encontrado com o ID: " + id));
+
+        existingFlow.updateInfo(
+                updateData.getTitle(),
+                updateData.getUserId(),
+                updateData.getCompanyId()
+        );
+
+        return existingFlow;
     }
 
     @Transactional
@@ -55,10 +69,31 @@ public class FlowService {
     }
 
     @Transactional
-    public void incrementExecuteErrorCount(String flowId){
+    public void incrementExecutedErrorCount(String flowId){
         flowRepository.findById(flowId).ifPresent(flow -> {
             flow.setExecutedErrorCount(flow.getExecutedErrorCount() + 1);
             flowRepository.save(flow);
         });
+    }
+
+    @Transactional
+    public Flow createFlowFromDto(FlowRequestDTO dto) {
+        Flow flow = flowMapper.toEntity(dto);
+
+
+        if (dto.getNodes() != null) {
+            dto.getNodes().forEach(nodeDto -> {
+                FlowNode node = flowNodeMapper.toEntity(nodeDto);
+                flow.addNode(node);
+            });
+        }
+        if (dto.getEdges() != null) {
+            dto.getEdges().forEach(edgeDto -> {
+                FlowEdge edge = flowEdgeMapper.toEntity(edgeDto);
+                flow.addEdge(edge);
+            });
+        }
+
+        return flowRepository.save(flow);
     }
 }

@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "flows")
@@ -46,10 +47,13 @@ public class Flow {
     @OneToMany(mappedBy = "flow", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<FlowNode> nodes = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "flow", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<FlowEdge> edges = new ArrayList<>();
-
+    public void updateInfo(String newTitle, Long newUserId, Long newCompanyId) {
+        this.setTitle(newTitle);
+        this.setUserId(newUserId);
+        this.setCompanyId(newCompanyId);
+    }
 
     public void addNode(FlowNode node) {
         nodes.add(node);
@@ -71,4 +75,28 @@ public class Flow {
         edge.setFlow(null);
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flow flow = (Flow) o;
+        return id != null && id.equals(flow.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), id);
+    }
+
+    @Override
+    public String toString() {
+        return "Flow{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", userId=" + userId +
+                ", companyId=" + companyId +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
